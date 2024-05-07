@@ -4,14 +4,16 @@ context Employee inv emailFormat:
 context Employee inv passwordLength:
   size(self.password) >= 8
 
-context Employee inv uniqueEmail:
-  let allEmails: Set(String) = self->asSet()->collect(e: Employee | e.email);
-  allEmails->size() = self->asSet()->size()
+context Employee pre updateEmployeeEmail:
+  let originalEmail: String = self.email@pre;
+
+context Employee post updateEmployeeEmail:
+  self.email = originalEmail implies self.email = self.email@pre
 
 context Employee pre nameNotNull:
   self.name <> null
 
-context Employee inv dateAfterToday:
+context Employee post dateAfterToday:
   self.date > today()
 
 context Employee inv updateEmployeeEmail:
@@ -24,9 +26,13 @@ context BlockUser inv userIdNotNull:
 context DeleteArticle inv titleNotNull:
    self.title <> null
 
-context Article inv validJournalist:
-  let journalist: Journalist = self.journalist->asSet()->any(j: Journalist | j.id = self.jo_id);
-  not journalist.oclIsUndefined()
+context Article pre validJournalist:
+  let originalJournalist: Journalist = self.journalist@pre;
+  originalJournalist.id = self.jo_id;
+
+context Article post validJournalist:
+  let updatedJournalist: Journalist = self.journalist;
+  updatedJournalist.id = self.jo_id implies not updatedJournalist.oclIsUndefined()
 
 context Article inv contentNotNull:
   self.content <> null
@@ -52,17 +58,22 @@ context Journalist inv passwordNotNull:
 context Admin inv passwordNotNull:
   not self.password->isEmpty()
 
-context User inv validLogin:
-  let user: User = self->select(u: User | u.username = self.username and u.password = self.password)->asSet()->any(u: User);
-  not user.oclIsUndefined()
+context User post validLogin:
+  let user: User = self@pre;
+  let loggedInUser: User = user->select(u: User | u.username = self.username and u.password = self.password)->asSet()->any(u: User);
+  not loggedInUser.oclIsUndefined()
 
 context Payment inv priceNotNull:
   not self.price->isEmpty()
 
-context Payment inv validUser:
-  let user: User = self.user->asSet()->any(u: User | u.id = self.userId);
-  not user.oclIsUndefined()
+context Payment pre validUser:
+  let originalUser: User = self.user@pre;
+  originalUser.id = self.userId;
 
 context Article inv titleNotNullForDelete:
   not self.title->isEmpty()
+
+context Employee::updateEmployeeEmail(email: String)
+post: 
+    self.email = email
 
