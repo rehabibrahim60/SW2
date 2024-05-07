@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>BizNews - Free News Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+      <!-- Topbar Start -->
+  <div class="container-fluid d-none d-lg-block">
+    
+
+           
+        
+    </div>
+    <div class="row align-items-center bg-white py-3 px-lg-5">
+        <div class="col-lg-4">
+            <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
+                <h1 class="m-0 display-4 text-uppercase text-primary">digital<span class="text-secondary font-weight-normal">Newsstand</span></h1>
+            </a>
+        </div>
+
+    </div>
+</div>
+<!-- Topbar End -->
+
+<!-- Navbar Start -->
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
+        <a href="index.html" class="navbar-brand d-block d-lg-none">
+            <h1 class="m-0 display-4 text-uppercase text-primary">Digital<span class="text-white font-weight-normal">Newss</span></h1>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+       
+        <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+            <div class="navbar-nav mr-auto py-0">
+                
+                <a href="home.html" class="nav-item nav-link active">Home</a>
+                <a href="fav.html" class="nav-item nav-link">Favourit List</a>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+                <a href="loginhtml.html" class="nav-item nav-link">Log In</a>
+                <a href="Aregister.html" class="nav-item nav-link">Register</a>
+                
+                
+            </div>
+
+        </div>
+    </nav>
+</div>
+<!-- Navbar End -->
+
+
+
+
+
+<div class="card m-2 p-2">
+    <div class="card-header">Your Favorite List</div>
+    <div class="card-body">
+        <table class="table" id="fav_table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>TITLE</td>
+                    <td>CONTENT</td>
+                    <td>Unstar</td> <!-- New column for delete button -->
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+<script>
+   
+   function updateTable(){
+        $("#fav_table tbody").empty(); // corrected tbody id
+         user_id= sessionStorage.getItem(id)
+        var url = "http://localhost:9090/favorite-list/{user_id}";
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function(data){
+                for(i=0; i< data.length; i++){
+                    $("#fav_table tbody").append("<tr><td>" + data[i].id +"</td><td>" + data[i].title + "</td><td>" + data[i].content + "</td>" +"<td> <button class='deleteBtn btn btn-danger' data-ib='" + data[i].id + "'>Unstar</button></td></tr>"); // Added delete button in each row with data-id attribute
+                }
+                console.log(data);
+            },
+            error: function(){
+                console.log("error: can not access api");
+            }
+        });
+    };
+
+    updateTable();
+
+     $(document).ready(function(){
+   
+        // remove button click event
+        $(document).on('click', '.deleteBtn', function(){
+            var artId = $(this).data('ib');
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:9090/favorite-list/articles/{artId}",
+                success: function(response){
+                    $('#message').text("article Unstar");
+                    updateTable(); // Update table after deleting employee
+                },
+                error: function(xhr, error, status){
+                    $("#message").text("Error");
+                }
+            });
+        });
+    });
+
+
+</script>
+
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

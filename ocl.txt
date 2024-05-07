@@ -1,0 +1,68 @@
+context Employee inv emailFormat:
+  self.email->matches('^[^@]+@[^@]+\.[^.]+$')
+
+context Employee inv passwordLength:
+  size(self.password) >= 8
+
+context Employee inv uniqueEmail:
+  let allEmails: Set(String) = self->asSet()->collect(e: Employee | e.email);
+  allEmails->size() = self->asSet()->size()
+
+context Employee pre nameNotNull:
+  self.name <> null
+
+context Employee inv dateAfterToday:
+  self.date > today()
+
+context Employee inv updateEmployeeEmail:
+  let originalEmployee: Employee = self@pre;
+  originalEmployee.email = self.email
+
+context BlockUser inv userIdNotNull:
+   self.userId <> null
+
+context DeleteArticle inv titleNotNull:
+   self.title <> null
+
+context Article inv validJournalist:
+  let journalist: Journalist = self.journalist->asSet()->any(j: Journalist | j.id = self.jo_id);
+  not journalist.oclIsUndefined()
+
+context Article inv contentNotNull:
+  self.content <> null
+
+context Article inv titleNotNull:
+   self.title <> null
+
+context User pre usernameNotNull:
+  not self.username->isEmpty()
+
+context Journalist inv usernameNotNull:
+  not self. Username->isEmpty()
+
+context Admin inv usernameNotNull:
+  not self.username->isEmpty()
+
+context User inv passwordNotNull:
+  not self.password->isEmpty()
+
+context Journalist inv passwordNotNull:
+  not self.password->isEmpty()
+
+context Admin inv passwordNotNull:
+  not self.password->isEmpty()
+
+context User inv validLogin:
+  let user: User = self->select(u: User | u.username = self.username and u.password = self.password)->asSet()->any(u: User);
+  not user.oclIsUndefined()
+
+context Payment inv priceNotNull:
+  not self.price->isEmpty()
+
+context Payment inv validUser:
+  let user: User = self.user->asSet()->any(u: User | u.id = self.userId);
+  not user.oclIsUndefined()
+
+context Article inv titleNotNullForDelete:
+  not self.title->isEmpty()
+

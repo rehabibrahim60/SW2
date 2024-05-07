@@ -1,0 +1,204 @@
+<!-- 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="user-box">
+        <input type="text" name="name" id="email" required>
+        <label>Email</label>
+      </div>
+      <div class="user-box">
+        <input type="password" name="salary" id="password" required>
+        <label>Password</label>
+      </div>
+
+      <select name="type" id="type" class="">
+           <option disabled="disabled" selected="selected" Required>Choose Type </option>
+           <option>User</option>
+           <option>Admin</option>
+           <option>Journalist</option>
+      </select>
+      <br>
+      <div >
+        <input type="submit" value="submit">
+      </div>
+    </form>
+  </div>
+  <div id="message"></div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var type = document.getElementById("type").value;
+      var fdata = {
+        email: $('#email').val(),
+        password: $('#password').val()
+      };
+
+      $.ajax({
+        url: 'http://localhost:7060/employee/getAll',
+        method: 'GET',
+        success: function(data){
+          data.forEach(function(data){
+            if(data.email === email && data.password === password && data.type === type){
+              window.location.href = "home.html";
+            }
+
+            if (email === 'admin' && password === 'admin' && type === 'Admin') {
+              window.location.href = "admin.html"; // Redirect to admin.html
+            }
+
+            if(!found){
+              $("#error-message").text("Incorrect email or password").addClass('show');
+            };
+          });
+        },
+
+        error: function(xhr, status, error) {
+          console.error(status + ': ' + error);
+        }
+
+      });
+
+      
+    });
+  </script>
+
+</body>
+</html> -->
+
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    .container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    input[type="email"],
+    input[type="password"],
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    button[type="submit"] {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .show {
+      display: block;
+    }
+    
+    .error {
+      border: 2px solid red;
+    }
+    
+  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>login</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+<div class="container">
+  <form id="loginForm">
+    <h2>Hi, Friend!</h2>
+    <div id="error-message" class="error-message"></div>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <select name="type" id="type" class="">
+      <option disabled="disabled" selected="selected" Required>Choose Type </option>
+      <option>USER</option>
+      <option>JOURNALIST</option>
+      <option>ADMIN</option>
+    </select>
+    
+    <button type="submit">Login</button>
+  </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#loginForm').submit(function(e) {
+      e.preventDefault(); 
+  
+      var email = $('#email').val();
+      var password = $('#password').val();
+      var type = $('#type').val();
+  
+      $.ajax({
+        url: `http://localhost:9090/l/login`,
+        method: 'POST',
+        data:JSON.stringify({email , password , type}),
+        success: function(data) {
+            if ( type == "USER") {
+              window.location.href = 'home.html'; 
+            }
+            if ( type == "ADMIN") {
+              window.location.href = 'admin.html'; 
+            }
+            if ( type == "JOURNALIST") {
+              window.location.href = 'jo.html'; 
+            }
+          
+         
+            $('#error-message').text('Incorrect email or password').addClass('show');
+            $('#loginForm').addClass('error');
+        
+        },
+        error: function(xhr, status, error) {
+          console.error(status + ': ' + error);
+          console.log("errorRehab");
+        }
+      });
+    });
+  });
+  
+</script>
+
+</body>
+</html>

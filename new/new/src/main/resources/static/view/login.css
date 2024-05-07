@@ -1,0 +1,83 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: sans-serif;
+}
+
+body {
+	/* background: #cac113; */
+    background-image: url("design-background-yellow-and-black-free-vector.jpg");
+    
+}
+
+.login-box {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 300px;
+	height: 450px;
+	padding: 80px 40px;
+	background: rgb(16, 16, 16);
+	border-radius: 10px;
+}
+
+h2 {
+	margin: 0;
+	padding: 0 0 20px;
+	text-align: center;
+	font-size: 22px;
+    color: #cac113;
+}
+
+.user-box {
+	position: relative;
+}
+
+.user-box input {
+	width: 100%;
+	padding: 10px 0;
+	font-size: 16px;
+	color: #1c1c1b;
+	margin-bottom: 30px;
+	border: none;
+	border-bottom: 1px solid #333;
+	outline: none;
+	background: transparent;
+}
+
+.user-box label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px 0;
+	font-size: 16px;
+	color: #fefcfc;
+	pointer-events: none;
+	transition: 0.5s;
+}
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+	top: -20px;
+	left: 0;
+	color: #cac113;
+	font-size: 12px;
+}
+
+input[type="submit"] {
+	border: none;
+	outline: none;
+	height: 40px;
+	background: #cac113;
+	color: #fff;
+	font-size: 18px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+input[type="submit"]:hover {
+	background: #cac113;
+	color: #fff;
+}
